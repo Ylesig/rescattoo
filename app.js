@@ -39,7 +39,7 @@ lista.innerHTML+=`
 window.escolherGato = function(id){
 const gato = gatos.find(g=>g.id===id);
 
-document.getElementById("fotoGato").src = gato.foto;
+document.getElementById("imgGato").src = gato.img;
 document.getElementById("nomeGato").innerText = gato.nome;
 document.getElementById("idadeGato").innerText = gato.idade;
 document.getElementById("sexoGato").innerText = gato.sexo;
