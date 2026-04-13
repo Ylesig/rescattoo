@@ -1,20 +1,22 @@
-import { adocoes, gatos } from "../data/banco.js";
+import express from "express";
+import { adocoes, gatos } from "./banco.js";
 
-export function solicitar(req, res) {
+const router = express.Router();
+
+// solicitar adoção
+router.post("/", (req, res) => {
   const { id_gato, nome } = req.body;
 
-  // verifica se gato existe
   const gato = gatos.find(g => g.id == id_gato);
 
   if (!gato) {
     return res.status(404).json({ erro: "Gato não encontrado" });
   }
 
-  // REGRA DO PROJETO:
-  // muda status automaticamente
+  // regra do projeto
   gato.status = "Em processo de adoção";
 
-  const novaAdocao = {
+  const nova = {
     id: Date.now(),
     id_gato,
     nome,
@@ -22,7 +24,9 @@ export function solicitar(req, res) {
     data: new Date()
   };
 
-  adocoes.push(novaAdocao);
+  adocoes.push(nova);
 
-  res.status(201).json(novaAdocao);
-}
+  res.status(201).json(nova);
+});
+
+export default router;
