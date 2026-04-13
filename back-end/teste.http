@@ -1,0 +1,21 @@
+GET http://localhost:3000/gatos
+
+###
+
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Deborah",
+  "email": "teste@gmail.com"
+}
+
+###
+
+POST http://localhost:3000/adocoes
+Content-Type: application/json
+
+{
+  "id_gato": 1,
+  "nome": "Deborah"
+}
