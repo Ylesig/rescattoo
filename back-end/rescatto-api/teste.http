@@ -1,0 +1,31 @@
+GET http://localhost:3000/gatos
+
+
+###
+
+POST http://localhost:3000/gatos
+Content-Type: application/json
+
+{
+  "nome":"Nina",
+  "idade":"2 meses",
+  "sexo":"Fêmea",
+  "foto":"https://placekitten.com/210/200"
+}
+
+### 
+
+
+
+PUT http://localhost:3000/gatos/1
+Content-Type: application/json
+
+{
+  "nome":"Luna Atualizada"
+}
+
+
+###
+
+
+DELETE http://localhost:3000/gatos/2
