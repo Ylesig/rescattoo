@@ -1,54 +1,83 @@
-import { gatos } from "./dados.js";
-
+// MOSTRAR SEÇÕES
 window.mostrar = function(id){
-document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
 };
 
-document.getElementById("formUser").addEventListener("submit", e=>{
-e.preventDefault();
 
-const email = document.querySelector("#formUser input[type='email']").value;
-const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+// CADASTRO USUÁRIO
+document.getElementById("formUser").addEventListener("submit", async e => {
+    e.preventDefault();
 
-if(!regex.test(email)){
-alert("Digite um Gmail válido 😤");
-return;
-}
+    const email = document.querySelector("#formUser input[type='email']").value;
+    const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
-alert("Cadastro realizado!");
-mostrar("gatos");
-carregarGatos();
+    if(!regex.test(email)){
+        alert("Digite um Gmail válido 😤");
+        return;
+    }
+
+    alert("Cadastro realizado!");
+
+    mostrar("gatos");
+    carregarGatos(); // 🔥 chama API
 });
 
-function carregarGatos(){
-const lista = document.getElementById("lista");
-lista.innerHTML="";
 
-gatos.forEach(g=>{
-lista.innerHTML+=`
-<div class="card">
-<img src="${g.foto}">
-<h3>${g.nome}</h3>
-<p>${g.idade} • ${g.sexo}</p>
-<button onclick="escolherGato(${g.id})">Adotar</button>
-</div>`;
-});
+// 🔥 CARREGAR GATOS DA API
+async function carregarGatos(){
+
+    try{
+        const resposta = await fetch("http://localhost:3000/gatos");
+        const gatos = await resposta.json();
+
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+
+        gatos.forEach(g => {
+            lista.innerHTML += `
+            <div class="card">
+                <img src="${g.foto}">
+                <h3>${g.nome}</h3>
+                <p>${g.idade} • ${g.sexo}</p>
+                <button onclick="escolherGato(${g.id})">Adotar</button>
+            </div>
+            `;
+        });
+
+    } catch(erro){
+        alert("Erro ao carregar gatos 😢");
+        console.error(erro);
+    }
 }
 
-window.escolherGato = function(id){
-const gato = gatos.find(g=>g.id===id);
 
-document.getElementById("imgGato").src = gato.foto;
-document.getElementById("nomeGato").innerText = gato.nome;
-document.getElementById("idadeGato").innerText = gato.idade;
-document.getElementById("sexoGato").innerText = gato.sexo;
+// 🔥 ESCOLHER GATO (BUSCA POR ID NA API)
+window.escolherGato = async function(id){
 
-mostrar("adocao");
+    try{
+        const resposta = await fetch(`http://localhost:3000/gatos/${id}`);
+        const gato = await resposta.json();
+
+        document.getElementById("imgGato").src = gato.foto;
+        document.getElementById("nomeGato").innerText = gato.nome;
+        document.getElementById("idadeGato").innerText = gato.idade;
+        document.getElementById("sexoGato").innerText = gato.sexo;
+
+        mostrar("adocao");
+
+    } catch(erro){
+        alert("Erro ao carregar gato 😢");
+        console.error(erro);
+    }
 };
 
+
+// FORMULÁRIO ADOÇÃO
 document.getElementById("formAdocao").addEventListener("submit", e=>{
-e.preventDefault();
-alert("Solicitação enviada 🐱");
-mostrar("gatos");
+    e.preventDefault();
+
+    alert("Solicitação enviada 🐱");
+
+    mostrar("gatos");
 });
