@@ -1,4 +1,4 @@
-const API_URL = "https://glorious-space-succotash-q7gqppj4qrq7cx6vj-3000.app.github.dev/";
+const API_URL = window.location.origin.replace("5500", "3000");
 
 window.mostrar = function(id){
 document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
@@ -26,6 +26,8 @@ carregarGatos();
 async function carregarGatos(){
 
 try{
+console.log("Buscando gatos em:", `${API_URL}/gatos`);
+
 const resposta = await fetch(`${API_URL}/gatos`);
 
 if(!resposta.ok){
@@ -41,7 +43,7 @@ gatos.forEach(g => {
 
 lista.innerHTML += `
 <div class="card">
-<img src="${g.foto}">
+<img src="${g.foto}" alt="gato">
 <h3>${g.nome}</h3>
 <p>${g.idade} • ${g.sexo}</p>
 <button onclick="escolherGato(${g.id})">Adotar</button>
@@ -51,8 +53,8 @@ lista.innerHTML += `
 });
 
 }catch(erro){
-console.error(erro);
-alert("Erro ao carregar gatos 😢 (verifique o backend)");
+console.error("ERRO REAL:", erro);
+alert("Erro ao carregar gatos 😢 (abre o console F12)");
 }
 
 }
@@ -61,6 +63,8 @@ alert("Erro ao carregar gatos 😢 (verifique o backend)");
 window.escolherGato = async function(id){
 
 try{
+console.log("Buscando gato:", `${API_URL}/gatos/${id}`);
+
 const resposta = await fetch(`${API_URL}/gatos/${id}`);
 
 if(!resposta.ok){
@@ -77,7 +81,7 @@ document.getElementById("fotoGato").src = gato.foto;
 mostrar("adocao");
 
 }catch(erro){
-console.error(erro);
+console.error("ERRO REAL:", erro);
 alert("Erro ao carregar dados do gato 😢");
 }
 
