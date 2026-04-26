@@ -7,14 +7,15 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
+app.use(express.static("public"));
 
 const PORT = 3000;
 
 // ARRAY TEMPORÁRIO
 let gatos = [
- { id:1, nome:"Luna", idade:"3 meses", sexo:"Fêmea", foto:"https://placekitten.com/200/200"},
- { id:2, nome:"Simba", idade:"5 meses", sexo:"Macho", foto:"https://placekitten.com/201/200"},
- { id:3, nome:"Mel", idade:"1 ano", sexo:"Fêmea", foto:"https://placekitten.com/200/201"}
+ { id:1, nome:"Luna", idade:"3 meses", sexo:"Fêmea", foto:"http://localhost:3000/gato1.jpg"},
+ { id:2, nome:"Simba", idade:"5 meses", sexo:"Macho", foto:"http://localhost:3000/gato2.jpg"},
+ { id:3, nome:"Mel", idade:"1 ano", sexo:"Fêmea", foto:"http://localhost:3000/gato3.jpg"}
 ];
 
 // GET TODOS
