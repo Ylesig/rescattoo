@@ -1,3 +1,5 @@
+const API_URL = "https://glorious-space-succotash-q7gqppj4qrq7cx6vj-3000.app.github.dev";
+
 window.mostrar = function(id){
 document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
@@ -23,10 +25,14 @@ carregarGatos();
 // CARREGAR GATOS DA API
 async function carregarGatos(){
 
-const resposta = await fetch("http://localhost:3000/gatos");
+try{
+const resposta = await fetch(`${API_URL}/gatos`);
+
+if(!resposta.ok){
+throw new Error("Erro ao buscar gatos");
+}
 
 const gatos = await resposta.json();
-
 const lista = document.getElementById("lista");
 
 lista.innerHTML = "";
@@ -44,20 +50,36 @@ lista.innerHTML += `
 
 });
 
+}catch(erro){
+console.error(erro);
+alert("Erro ao carregar gatos 😢 (verifique o backend)");
+}
+
 }
 
 // ESCOLHER GATO
 window.escolherGato = async function(id){
 
-const resposta = await fetch(`http://localhost:3000/gatos/${id}`);
+try{
+const resposta = await fetch(`${API_URL}/gatos/${id}`);
+
+if(!resposta.ok){
+throw new Error("Erro ao buscar gato");
+}
 
 const gato = await resposta.json();
 
 document.getElementById("nomeGato").innerText = gato.nome;
 document.getElementById("idadeGato").innerText = gato.idade;
 document.getElementById("sexoGato").innerText = gato.sexo;
+document.getElementById("fotoGato").src = gato.foto;
 
 mostrar("adocao");
+
+}catch(erro){
+console.error(erro);
+alert("Erro ao carregar dados do gato 😢");
+}
 
 };
 
@@ -66,6 +88,5 @@ document.getElementById("formAdocao").addEventListener("submit", e=>{
 e.preventDefault();
 
 alert("Solicitação enviada 🐱");
-
 mostrar("gatos");
 });
