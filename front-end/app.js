@@ -1,4 +1,4 @@
-const API_URL = "https://glorious-space-succotash-q7gqppj4qrq7cx6vj-3000.app.github.dev";
+const API_URL = "https://glorious-space-succotash-q7gqppj4qrq7cx6vj-3000.app.github.dev/";
 
 window.mostrar = function(id){
 document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
