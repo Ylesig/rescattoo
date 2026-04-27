@@ -1,34 +1,7 @@
-// MOSTRAR SEÇÕES
-window.mostrar = function(id){
-    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-};
-
-
-// CADASTRO USUÁRIO
-document.getElementById("formUser").addEventListener("submit", async e => {
-    e.preventDefault();
-
-    const email = document.querySelector("#formUser input[type='email']").value;
-    const regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-
-    if(!regex.test(email)){
-        alert("Digite um Gmail válido 😤");
-        return;
-    }
-
-    alert("Cadastro realizado!");
-
-    mostrar("gatos");
-    carregarGatos(); // 🔥 chama API
-});
-
-
-// 🔥 CARREGAR GATOS DA API
+// CARREGAR GATOS
 async function carregarGatos(){
-
     try{
-        const resposta = await fetch("http://localhost:3000/gatos");
+        const resposta = await fetch("https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gatos");
         const gatos = await resposta.json();
 
         const lista = document.getElementById("lista");
@@ -47,19 +20,16 @@ async function carregarGatos(){
 
     } catch(erro){
         alert("Erro ao carregar gatos 😢");
-        console.error(erro);
     }
 }
 
-
-// 🔥 ESCOLHER GATO (BUSCA POR ID NA API)
+// ESCOLHER GATO
 window.escolherGato = async function(id){
-
     try{
-        const resposta = await fetch(`http://localhost:3000/gatos/${id}`);
+        const resposta = await fetch(`https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gatos/${id}`);
         const gato = await resposta.json();
 
-        document.getElementById("imgGato").src = gato.foto;
+        document.getElementById("fotoGato").src = gato.foto;
         document.getElementById("nomeGato").innerText = gato.nome;
         document.getElementById("idadeGato").innerText = gato.idade;
         document.getElementById("sexoGato").innerText = gato.sexo;
@@ -68,16 +38,5 @@ window.escolherGato = async function(id){
 
     } catch(erro){
         alert("Erro ao carregar gato 😢");
-        console.error(erro);
     }
 };
-
-
-// FORMULÁRIO ADOÇÃO
-document.getElementById("formAdocao").addEventListener("submit", e=>{
-    e.preventDefault();
-
-    alert("Solicitação enviada 🐱");
-
-    mostrar("gatos");
-});
