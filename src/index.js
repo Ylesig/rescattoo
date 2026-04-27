@@ -9,14 +9,14 @@ app.use(morgan("dev"));
 app.use(cors());
 const path = require("path");
 
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static("public"));
 const PORT = 3000;
 
 // ARRAY TEMPORÁRIO
 let gatos = [
- { id:1, nome:"Luna", idade:"3 meses", sexo:"Fêmea", foto:"https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gato1.jpg"},
- { id:2, nome:"Simba", idade:"5 meses", sexo:"Macho", foto:"https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gato2.jpg"},
- { id:3, nome:"Mel", idade:"1 ano", sexo:"Fêmea", foto:"https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gato3.jpg"}
+ { id:1, nome:"Luna", idade:"3 meses", sexo:"Fêmea", foto:"https://super-waffle-pjqrpp4wr4vvcqg4-3000.app.github.dev/gato1.jpg"},
+ { id:2, nome:"Simba", idade:"5 meses", sexo:"Macho", foto:"https://super-waffle-pjqrpp4wr4vvcqg4-3000.app.github.dev/gato2.jpg"},
+ { id:3, nome:"Mel", idade:"1 ano", sexo:"Fêmea", foto:"https://super-waffle-pjqrpp4wr4vvcqg4-3000.app.github.dev/gato3.jpg"}
 ];
 
 // GET TODOS

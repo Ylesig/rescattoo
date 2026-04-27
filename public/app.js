@@ -24,11 +24,11 @@ document.getElementById("formUser").addEventListener("submit", async e => {
 });
 
 
-// 🔥 CARREGAR GATOS DA API
+// CARREGAR GATOS DA API
 async function carregarGatos(){
 
     try{
-        const resposta = await fetch("https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gatos");
+        const resposta = await fetch("/gatos");
         const gatos = await resposta.json();
 
         const lista = document.getElementById("lista");
@@ -52,11 +52,11 @@ async function carregarGatos(){
 }
 
 
-// 🔥 ESCOLHER GATO
+// ESCOLHER GATO
 window.escolherGato = async function(id){
 
     try{
-        const resposta = await fetch(`https://probable-bassoon-9749jjr59rgphwvj-3000.app.github.dev/gatos/${id}`);
+        const resposta = await fetch(`/gatos/${id}`);
         const gato = await resposta.json();
 
         document.getElementById("imgGato").src = gato.foto;
