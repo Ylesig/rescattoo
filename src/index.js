@@ -2,32 +2,21 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
-import routes from "./routes.js";
+import gatoRoutes from "./routes/gatoRoutes.js";
 
 const app = express();
 
-const PORT = 3000;
-
-
-// MIDDLEWARES
 app.use(express.json());
 
 app.use(cors());
 
 app.use(morgan("dev"));
 
-
-// FRONT-END
 app.use(express.static("public"));
 
+app.use(gatoRoutes);
 
-// ROTAS
-app.use(routes);
+app.listen(3000, () => {
 
-
-// SERVIDOR
-app.listen(PORT, () => {
-
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-
+    console.log("Servidor rodando 🚀");
 });

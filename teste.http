@@ -1,7 +1,14 @@
+### GET TODOS
 GET http://localhost:3000/gatos
 
 ###
 
+### GET POR ID
+GET http://localhost:3000/gatos/1
+
+###
+
+### POST
 POST http://localhost:3000/gatos
 Content-Type: application/json
 
@@ -9,22 +16,23 @@ Content-Type: application/json
   "nome":"Nina",
   "idade":"2 meses",
   "sexo":"Fêmea",
-  "foto":"https://placekitten.com/210/200"
+  "foto":"/gato1.jpg"
 }
 
-### 
+###
 
-
-
+### PUT
 PUT http://localhost:3000/gatos/1
 Content-Type: application/json
 
 {
-  "nome":"Luna Atualizada"
+  "nome":"Luna Atualizada",
+  "idade":"4 meses",
+  "sexo":"Fêmea",
+  "foto":"/gato1.jpg"
 }
-
 
 ###
 
-
+### DELETE
 DELETE http://localhost:3000/gatos/2
