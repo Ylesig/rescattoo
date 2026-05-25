@@ -1,0 +1,82 @@
+erDiagram
+
+    Usuario {
+        INTEGER id_usuario PK
+        VARCHAR nome
+        VARCHAR endereco
+        VARCHAR contato
+        VARCHAR perfil
+    }
+
+    Comunicacao {
+        INTEGER id_comunicacao PK
+        VARCHAR descricao_comunicacao
+        DATETIME data_hora_envio
+        VARCHAR tipo_comunicacao
+        INTEGER id_user FK
+    }
+
+    Gato {
+        INTEGER id_gato PK
+        VARCHAR nome_gato
+        VARCHAR idade
+        VARCHAR sexo
+        VARCHAR cor
+        VARCHAR porte
+        VARCHAR temperamento
+        VARCHAR status
+        VARCHAR historico_tratamento
+    }
+
+    Solicitacao_de_adocao {
+        INTEGER id_solicitacao PK
+        VARCHAR status
+        DATE data_solicitacao
+        INTEGER id_user FK
+        INTEGER id_cat FK
+    }
+
+    Midia {
+        INTEGER id_midia PK
+        VARCHAR tipo_midia
+        DATE data_upload
+        INTEGER id_cat FK
+    }
+
+    Adocao {
+        INTEGER id_adocao PK
+        DATE data_confirmacao
+        INTEGER id_user FK
+        INTEGER id_cat FK
+    }
+
+    Campanha {
+        INTEGER id_campanha PK
+        VARCHAR nome_campanha
+        DECIMAL meta_arrecadacao
+        VARCHAR status_campanha
+        DATE data_inicio
+        DATE data_fim
+    }
+
+    Doacao {
+        INTEGER id_doacao PK
+        VARCHAR tipo_doacao
+        DECIMAL valor
+        DATE data_doacao
+        INTEGER id_user FK
+        INTEGER id_camp FK
+    }
+
+    Usuario ||--o{ Comunicacao : envia
+
+    Usuario ||--o{ Solicitacao_de_adocao : realiza
+    Gato ||--o{ Solicitacao_de_adocao : recebe
+
+    Usuario ||--o{ Adocao : adota
+    Gato ||--o{ Adocao : pertence
+
+    Gato ||--o{ Midia : possui
+
+    Usuario ||--o{ Doacao : faz
+    Campanha ||--o{ Doacao : recebe
