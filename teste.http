@@ -1,38 +1,67 @@
-### GET TODOS
+### ===================================
+### LISTAR TODOS OS GATOS
+### ===================================
+
 GET http://localhost:3000/gatos
 
 ###
 
-### GET POR ID
+
+### ===================================
+### BUSCAR GATO POR ID
+### ===================================
+
 GET http://localhost:3000/gatos/1
 
 ###
 
-### POST
+
+### ===================================
+### CRIAR GATO
+### ===================================
+
 POST http://localhost:3000/gatos
 Content-Type: application/json
 
 {
-  "nome":"Nina",
-  "idade":"2 meses",
-  "sexo":"Fêmea",
-  "foto":"/gato1.jpg"
+    "nome_gato": "Nina",
+    "idade": "2 meses",
+    "sexo": "F",
+    "cor": "Cinza",
+    "porte": "Pequeno",
+    "temperamento": "Carinhosa",
+    "status": "Disponivel",
+    "historico_tratamento": "Vacinada"
 }
 
 ###
 
-### PUT
+
+### ===================================
+### ATUALIZAR GATO
+### ===================================
+
 PUT http://localhost:3000/gatos/1
 Content-Type: application/json
 
 {
-  "nome":"Luna Atualizada",
-  "idade":"4 meses",
-  "sexo":"Fêmea",
-  "foto":"/gato1.jpg"
+    "nome_gato": "Luna Atualizada",
+    "idade": "4 meses",
+    "sexo": "F",
+    "cor": "Branco",
+    "porte": "Pequeno",
+    "temperamento": "Calma",
+    "status": "Disponivel",
+    "historico_tratamento": "Vacinada e Vermifugada"
 }
 
 ###
 
-### DELETE
-DELETE http://localhost:3000/gatos/2
+
+### ===================================
+### DELETAR GATO
+### ===================================
+
+DELETE http://localhost:3000/gatos/3
+
+###

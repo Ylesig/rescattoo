@@ -4,72 +4,118 @@ export async function listarGatos() {
 
     const db = await conectarBanco();
 
-    return await db.all("SELECT * FROM gatos");
+    return await db.all("SELECT * FROM Gato");
 }
-
 
 export async function buscarGato(id) {
 
     const db = await conectarBanco();
 
     return await db.get(
-        "SELECT * FROM gatos WHERE id = ?",
+        "SELECT * FROM Gato WHERE id_gato = ?",
         [id]
     );
 }
-
 
 export async function criarGato(gato) {
 
     const db = await conectarBanco();
 
-    const { nome, idade, sexo, foto } = gato;
+    const {
+        nome_gato,
+        idade,
+        sexo,
+        cor,
+        porte,
+        temperamento,
+        status,
+        historico_tratamento
+    } = gato;
 
     return await db.run(
 
         `
-        INSERT INTO gatos
-        (nome, idade, sexo, foto)
+        INSERT INTO Gato
+        (
+            nome_gato,
+            idade,
+            sexo,
+            cor,
+            porte,
+            temperamento,
+            status,
+            historico_tratamento
+        )
 
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `,
 
-        [nome, idade, sexo, foto]
+        [
+            nome_gato,
+            idade,
+            sexo,
+            cor,
+            porte,
+            temperamento,
+            status,
+            historico_tratamento
+        ]
     );
 }
-
 
 export async function atualizarGato(id, gato) {
 
     const db = await conectarBanco();
 
-    const { nome, idade, sexo, foto } = gato;
+    const {
+        nome_gato,
+        idade,
+        sexo,
+        cor,
+        porte,
+        temperamento,
+        status,
+        historico_tratamento
+    } = gato;
 
     return await db.run(
 
         `
-        UPDATE gatos
+        UPDATE Gato
 
         SET
-        nome = ?,
-        idade = ?,
-        sexo = ?,
-        foto = ?
+            nome_gato = ?,
+            idade = ?,
+            sexo = ?,
+            cor = ?,
+            porte = ?,
+            temperamento = ?,
+            status = ?,
+            historico_tratamento = ?
 
-        WHERE id = ?
+        WHERE id_gato = ?
         `,
 
-        [nome, idade, sexo, foto, id]
+        [
+            nome_gato,
+            idade,
+            sexo,
+            cor,
+            porte,
+            temperamento,
+            status,
+            historico_tratamento,
+            id
+        ]
     );
 }
-
 
 export async function deletarGato(id) {
 
     const db = await conectarBanco();
 
     return await db.run(
-        "DELETE FROM gatos WHERE id = ?",
+        "DELETE FROM Gato WHERE id_gato = ?",
         [id]
     );
 }

@@ -49,9 +49,23 @@ export async function postGato(req, res) {
 
     try {
 
-        const { nome, idade, sexo } = req.body;
+        const {
+            nome_gato,
+            idade,
+            sexo,
+            cor,
+            porte,
+            status
+        } = req.body;
 
-        if (!nome || !idade || !sexo) {
+        if (
+            !nome_gato ||
+            !idade ||
+            !sexo ||
+            !cor ||
+            !porte ||
+            !status
+        ) {
 
             return res.status(400).json({
                 erro: "Dados obrigatórios"
