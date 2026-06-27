@@ -6,7 +6,6 @@ GET http://localhost:3000/gatos
 
 ###
 
-
 ### ===================================
 ### BUSCAR GATO POR ID
 ### ===================================
@@ -14,7 +13,6 @@ GET http://localhost:3000/gatos
 GET http://localhost:3000/gatos/1
 
 ###
-
 
 ### ===================================
 ### CRIAR GATO
@@ -24,18 +22,17 @@ POST http://localhost:3000/gatos
 Content-Type: application/json
 
 {
-    "nome_gato": "Nina",
-    "idade": "2 meses",
-    "sexo": "F",
-    "cor": "Cinza",
-    "porte": "Pequeno",
-    "temperamento": "Carinhosa",
-    "status": "Disponivel",
-    "historico_tratamento": "Vacinada"
+  "nome_gato": "Nina",
+  "idade": "2 meses",
+  "sexo": "F",
+  "cor": "Cinza",
+  "porte": "Pequeno",
+  "temperamento": "Carinhosa",
+  "status": "Disponivel",
+  "historico_tratamento": "Vacinada"
 }
 
 ###
-
 
 ### ===================================
 ### ATUALIZAR GATO
@@ -45,18 +42,17 @@ PUT http://localhost:3000/gatos/1
 Content-Type: application/json
 
 {
-    "nome_gato": "Luna Atualizada",
-    "idade": "4 meses",
-    "sexo": "F",
-    "cor": "Branco",
-    "porte": "Pequeno",
-    "temperamento": "Calma",
-    "status": "Disponivel",
-    "historico_tratamento": "Vacinada e Vermifugada"
+  "nome_gato": "Luna Atualizada",
+  "idade": "4 meses",
+  "sexo": "F",
+  "cor": "Branco",
+  "porte": "Pequeno",
+  "temperamento": "Calma",
+  "status": "Disponivel",
+  "historico_tratamento": "Vacinada e Vermifugada"
 }
 
 ###
-
 
 ### ===================================
 ### DELETAR GATO
@@ -65,3 +61,24 @@ Content-Type: application/json
 DELETE http://localhost:3000/gatos/3
 
 ###
+
+### ===================================
+### CASO INVÁLIDO - BUSCAR GATO QUE NÃO EXISTE
+### ===================================
+
+GET http://localhost:3000/gatos/999
+
+###
+
+### ===================================
+### CASO INVÁLIDO - CRIAR GATO SEM DADOS
+### ===================================
+
+POST http://localhost:3000/gatos
+Content-Type: application/json
+
+{
+  "nome_gato": "",
+  "idade": "",
+  "sexo": ""
+}

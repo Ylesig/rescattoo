@@ -1,4 +1,4 @@
-import { conectarBanco } from "../database/database.js";
+import prisma from "../prisma.js";
 
 interface Gato {
   nome_gato: string;
@@ -12,93 +12,39 @@ interface Gato {
 }
 
 export async function listarGatos() {
-  const db = await conectarBanco();
-
-  return await db.all("SELECT * FROM Gato");
+  return await prisma.gato.findMany();
 }
 
 export async function buscarGato(id: string) {
-  const db = await conectarBanco();
-
-  return await db.get(
-    "SELECT * FROM Gato WHERE id_gato = ?",
-    [id]
-  );
+  return await prisma.gato.findUnique({
+    where: {
+      id_gato: Number(id),
+    },
+  });
 }
 
 export async function criarGato(gato: Gato) {
-  const db = await conectarBanco();
-
-  return await db.run(
-    `
-    INSERT INTO Gato
-    (
-      nome_gato,
-      idade,
-      sexo,
-      cor,
-      porte,
-      temperamento,
-      status,
-      historico_tratamento
-    )
-
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      gato.nome_gato,
-      gato.idade,
-      gato.sexo,
-      gato.cor,
-      gato.porte,
-      gato.temperamento,
-      gato.status,
-      gato.historico_tratamento
-    ]
-  );
+  return await prisma.gato.create({
+    data: gato,
+  });
 }
 
 export async function atualizarGato(
   id: string,
   gato: Gato
 ) {
-  const db = await conectarBanco();
-
-  return await db.run(
-    `
-    UPDATE Gato
-
-    SET
-      nome_gato = ?,
-      idade = ?,
-      sexo = ?,
-      cor = ?,
-      porte = ?,
-      temperamento = ?,
-      status = ?,
-      historico_tratamento = ?
-
-    WHERE id_gato = ?
-    `,
-    [
-      gato.nome_gato,
-      gato.idade,
-      gato.sexo,
-      gato.cor,
-      gato.porte,
-      gato.temperamento,
-      gato.status,
-      gato.historico_tratamento,
-      id
-    ]
-  );
+  return await prisma.gato.update({
+    where: {
+      id_gato: Number(id),
+    },
+    data: gato,
+  });
 }
 
 export async function deletarGato(id: string) {
-  const db = await conectarBanco();
-
-  return await db.run(
-    "DELETE FROM Gato WHERE id_gato = ?",
-    [id]
-  );
+  return await prisma.gato.delete({
+    where: {
+      id_gato: Number(id),
+    },
+  });
 }

@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id_usuario   Int     @id @default(autoincrement())
+  nome         String
+  endereco     String
+  contato      String  @unique
+  perfil       String
+
+  comunicacoes Comunicacao[]
+  solicitacoes SolicitacaoDeAdocao[]
+  adocoes      Adocao[]
+  doacoes      Doacao[]
+
+  @@map("Usuario")
+}
+
+model Gato {
+  id_gato                  Int      @id @default(autoincrement())
+  nome_gato                String
+  idade                    String
+  sexo                     String
+  cor                      String
+  porte                    String
+  temperamento             String?
+  status                   String
+  historico_tratamento     String?
+
+  solicitacoes             SolicitacaoDeAdocao[]
+  midias                   Midia[]
+  adocoes                  Adocao[]
+
+  @@map("Gato")
+}
+model Comunicacao {
+  id_comunicacao          Int      @id @default(autoincrement())
+  descricao_comunicacao   String
+  data_hora_envio         DateTime
+  tipo_comunicacao        String
+
+  id_user Int
+  usuario Usuario @relation(fields: [id_user], references: [id_usuario])
+
+  @@map("Comunicacao")
+}
+
+model SolicitacaoDeAdocao {
+  id_solicitacao     Int      @id @default(autoincrement())
+  status             String
+  data_solicitacao   DateTime
+
+  id_user Int
+  usuario Usuario @relation(fields: [id_user], references: [id_usuario])
+
+  id_cat Int
+  gato Gato @relation(fields: [id_cat], references: [id_gato])
+
+  @@map("Solicitacao_de_adocao")
+}
+model Midia {
+  id_midia      Int      @id @default(autoincrement())
+  tipo_midia    String
+  data_upload   DateTime
+
+  id_cat Int
+  gato Gato @relation(fields: [id_cat], references: [id_gato])
+
+  @@map("Midia")
+}
+
+model Adocao {
+  id_adocao          Int      @id @default(autoincrement())
+  data_confirmacao   DateTime
+
+  id_user Int
+  usuario Usuario @relation(fields: [id_user], references: [id_usuario])
+
+  id_cat Int
+  gato Gato @relation(fields: [id_cat], references: [id_gato])
+
+  @@map("Adocao")
+}
+model Campanha {
+  id_campanha        Int      @id @default(autoincrement())
+  nome_campanha      String
+  meta_arrecadacao   Float
+  status_campanha    String
+  data_inicio        DateTime
+  data_fim           DateTime
+
+  doacoes Doacao[]
+
+  @@map("Campanha")
+}
+
+model Doacao {
+  id_doacao      Int      @id @default(autoincrement())
+  tipo_doacao    String
+  valor          Float?
+  data_doacao    DateTime
+
+  id_user Int
+  usuario Usuario @relation(fields: [id_user], references: [id_usuario])
+
+  id_camp Int
+  campanha Campanha @relation(fields: [id_camp], references: [id_campanha])
+
+  @@map("Doacao")
+}
