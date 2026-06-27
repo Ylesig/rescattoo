@@ -1,5 +1,16 @@
 import { conectarBanco } from "../database/database.js";
 
+interface Gato {
+  nome_gato: string;
+  idade: string;
+  sexo: string;
+  cor: string;
+  porte: string;
+  temperamento?: string;
+  status: string;
+  historico_tratamento?: string;
+}
+
 export async function listarGatos() {
   const db = await conectarBanco();
 
@@ -15,19 +26,8 @@ export async function buscarGato(id: string) {
   );
 }
 
-export async function criarGato(gato: any) {
+export async function criarGato(gato: Gato) {
   const db = await conectarBanco();
-
-  const {
-    nome_gato,
-    idade,
-    sexo,
-    cor,
-    porte,
-    temperamento,
-    status,
-    historico_tratamento
-  } = gato;
 
   return await db.run(
     `
@@ -46,34 +46,23 @@ export async function criarGato(gato: any) {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
-      nome_gato,
-      idade,
-      sexo,
-      cor,
-      porte,
-      temperamento,
-      status,
-      historico_tratamento
+      gato.nome_gato,
+      gato.idade,
+      gato.sexo,
+      gato.cor,
+      gato.porte,
+      gato.temperamento,
+      gato.status,
+      gato.historico_tratamento
     ]
   );
 }
 
 export async function atualizarGato(
   id: string,
-  gato: any
+  gato: Gato
 ) {
   const db = await conectarBanco();
-
-  const {
-    nome_gato,
-    idade,
-    sexo,
-    cor,
-    porte,
-    temperamento,
-    status,
-    historico_tratamento
-  } = gato;
 
   return await db.run(
     `
@@ -92,14 +81,14 @@ export async function atualizarGato(
     WHERE id_gato = ?
     `,
     [
-      nome_gato,
-      idade,
-      sexo,
-      cor,
-      porte,
-      temperamento,
-      status,
-      historico_tratamento,
+      gato.nome_gato,
+      gato.idade,
+      gato.sexo,
+      gato.cor,
+      gato.porte,
+      gato.temperamento,
+      gato.status,
+      gato.historico_tratamento,
       id
     ]
   );
