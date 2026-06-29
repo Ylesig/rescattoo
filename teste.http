@@ -82,3 +82,28 @@ Content-Type: application/json
   "idade": "",
   "sexo": ""
 }
+
+### ===================================
+### CASO INVÁLIDO - ATUALIZAR GATO INEXISTENTE
+### ===================================
+
+PUT http://localhost:3000/gatos/999
+Content-Type: application/json
+
+{
+  "nome_gato": "Teste",
+  "idade": "1 ano",
+  "sexo": "M",
+  "cor": "Preto",
+  "porte": "Médio",
+  "temperamento": "Calmo",
+  "status": "Disponivel",
+  "historico_tratamento": "Nenhum"
+}
+
+### ===================================
+### CASO INVÁLIDO - DELETAR GATO INEXISTENTE
+### ===================================
+
+DELETE http://localhost:3000/gatos/999
+

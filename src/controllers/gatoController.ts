@@ -85,6 +85,37 @@ export async function putGato(
   res: Response
 ) {
   try {
+
+    const {
+      nome_gato,
+      idade,
+      sexo,
+      cor,
+      porte,
+      status,
+    } = req.body;
+
+    if (
+      !nome_gato ||
+      !idade ||
+      !sexo ||
+      !cor ||
+      !porte ||
+      !status
+    ) {
+      return res.status(400).json({
+        erro: "Dados obrigatórios",
+      });
+    }
+
+    const gato = await model.buscarGato(req.params.id);
+
+    if (!gato) {
+      return res.status(404).json({
+        erro: "Gato não encontrado",
+      });
+    }
+
     await model.atualizarGato(
       req.params.id,
       req.body
@@ -93,6 +124,7 @@ export async function putGato(
     res.json({
       mensagem: "Gato atualizado",
     });
+
   } catch {
     res.status(500).json({
       erro: "Erro ao atualizar",
@@ -106,9 +138,19 @@ export async function deleteGato(
   res: Response
 ) {
   try {
+
+    const gato = await model.buscarGato(req.params.id);
+
+    if (!gato) {
+      return res.status(404).json({
+        erro: "Gato não encontrado",
+      });
+    }
+
     await model.deletarGato(req.params.id);
 
     res.status(204).send();
+
   } catch {
     res.status(500).json({
       erro: "Erro ao deletar",
