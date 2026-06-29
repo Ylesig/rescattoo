@@ -295,17 +295,24 @@
 
         <nav>
 
-            <ul class="nav-links">
+           <ul class="nav-links">
 
-                <li>
-                    <a onclick="mostrar('cadastro')">
-                        Cadastre-se
-                    </a>
-                </li>
+    <li>
+        <a onclick="mostrar('cadastro')">
+            Cadastre-se
+        </a>
+    </li>
 
-            </ul>
+    <li>
+        <a onclick="mostrar('adminCadastro')">
+            Administrador
+        </a>
+    </li>
 
-        </nav>
+</ul>
+
+</nav>
+
 
     </header>
 
@@ -345,6 +352,76 @@
 
     </section>
 
+    <section id="adminCadastro">
+
+    <h2>Cadastro do Administrador</h2>
+
+    <form id="formAdmin">
+
+        <input
+            type="text"
+            placeholder="Nome do administrador"
+            required>
+
+        <input
+            type="email"
+            placeholder="Email"
+            required>
+
+        <input
+            type="password"
+            placeholder="Senha"
+            required>
+
+        <button type="submit">
+            Entrar
+        </button>
+
+    </form>
+
+</section>
+
+<section id="painelAdmin">
+
+    <h2>Painel do Administrador</h2>
+
+    <form id="formGato">
+
+        <input
+            type="text"
+            id="nomeGato"
+            placeholder="Nome do gato"
+            required>
+
+        <input
+            type="text"
+            id="idade"
+            placeholder="Idade"
+            required>
+
+        <input
+            type="text"
+            id="sexo"
+            placeholder="Sexo"
+            required>
+
+        <input
+            type="text"
+            id="cor"
+            placeholder="Cor"
+            required>
+
+        <button type="submit">
+            Cadastrar gato
+        </button>
+
+    </form>
+
+    <br>
+
+    <div id="listaAdmin"></div>
+
+</section>
 
     <section id="gatos">
 

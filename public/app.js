@@ -1,5 +1,15 @@
+// ======================================
+// CONTROLE DE EDIÇÃO
+// ======================================
+
+let idEditando = null;
+
+
+// ======================================
 // MOSTRAR SEÇÕES
-window.mostrar = function(id) {
+// ======================================
+
+window.mostrar = function (id) {
 
     document
         .querySelectorAll("section")
@@ -13,10 +23,13 @@ window.mostrar = function(id) {
 };
 
 
-// CADASTRO
+// ======================================
+// CADASTRO DO USUÁRIO
+// ======================================
+
 document
     .getElementById("formUser")
-    .addEventListener("submit", async function(e) {
+    .addEventListener("submit", async function (e) {
 
         e.preventDefault();
 
@@ -25,24 +38,131 @@ document
         ).value;
 
         const regex =
-        /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
         if (!regex.test(email)) {
 
-            alert("Digite um Gmail válido 😤");
+            alert("Digite um Gmail válido!");
 
             return;
+
         }
 
-        alert("Cadastro realizado!");
+        alert("Cadastro realizado com sucesso!");
 
         mostrar("gatos");
 
         carregarGatos();
+
     });
 
 
-// CARREGAR GATOS
+// ======================================
+// LOGIN DO ADMINISTRADOR
+// ======================================
+
+document
+    .getElementById("formAdmin")
+    .addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        alert("Administrador autenticado!");
+
+        mostrar("painelAdmin");
+
+        carregarGatosAdmin();
+
+    });
+
+
+// ======================================
+// CADASTRAR / EDITAR GATO
+// ======================================
+
+document
+    .getElementById("formGato")
+    .addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const gato = {
+
+            nome_gato:
+                document.getElementById("nomeGato").value,
+
+            idade:
+                document.getElementById("idade").value,
+
+            sexo:
+                document.getElementById("sexo").value,
+
+            cor:
+                document.getElementById("cor").value
+
+        };
+
+        try {
+
+            if (idEditando == null) {
+
+                await fetch("/gatos", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(gato)
+
+                });
+
+                alert("Gato cadastrado!");
+
+            }
+
+            else {
+
+                await fetch(`/gatos/${idEditando}`, {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(gato)
+
+                });
+
+                alert("Gato atualizado!");
+
+                idEditando = null;
+
+            }
+
+            this.reset();
+
+            carregarGatosAdmin();
+
+        }
+
+        catch (erro) {
+
+            console.error(erro);
+
+            alert("Erro ao salvar gato.");
+
+        }
+
+    });
+
+
+// ======================================
+// CARREGAR GATOS (ADOÇÃO)
+// ======================================
+
 async function carregarGatos() {
 
     try {
@@ -52,7 +172,7 @@ async function carregarGatos() {
         const gatos = await resposta.json();
 
         const lista =
-        document.getElementById("lista");
+            document.getElementById("lista");
 
         lista.innerHTML = "";
 
@@ -68,13 +188,9 @@ async function carregarGatos() {
 
                 <h3>${gato.nome_gato}</h3>
 
-                <p>
-                    ${gato.idade} • ${gato.sexo}
-                </p>
+                <p>${gato.idade} • ${gato.sexo}</p>
 
-                <p>
-                    ${gato.cor}
-                </p>
+                <p>${gato.cor}</p>
 
                 <button
                 onclick="escolherGato(${gato.id_gato}, ${index + 1})">
@@ -86,27 +202,190 @@ async function carregarGatos() {
             </div>
 
             `;
+
         });
 
-    } catch (erro) {
+    }
 
-        alert("Erro ao carregar gatos 😢");
+    catch (erro) {
 
         console.error(erro);
+
+        alert("Erro ao carregar gatos.");
+
     }
+
+}
+// ======================================
+// CARREGAR GATOS (ADMINISTRADOR)
+// ======================================
+
+async function carregarGatosAdmin() {
+
+    try {
+
+        const resposta = await fetch("/gatos");
+
+        const gatos = await resposta.json();
+
+        const lista =
+            document.getElementById("listaAdmin");
+
+        lista.innerHTML = "";
+
+        gatos.forEach((gato) => {
+
+            lista.innerHTML += `
+
+                <div class="card">
+
+                    <h3>${gato.nome_gato}</h3>
+
+                    <p><strong>Idade:</strong> ${gato.idade}</p>
+
+                    <p><strong>Sexo:</strong> ${gato.sexo}</p>
+
+                    <p><strong>Cor:</strong> ${gato.cor}</p>
+
+                    <br>
+
+                    <button
+                        onclick="editar(${gato.id_gato})">
+
+                        Editar
+
+                    </button>
+
+                    <button
+                        style="background:#d9534f; margin-top:10px;"
+                        onclick="excluir(${gato.id_gato})">
+
+                        Excluir
+
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro ao carregar gatos.");
+
+    }
+
 }
 
 
-// ESCOLHER GATO
-window.escolherGato = async function(id, imagem) {
+// ======================================
+// EDITAR GATO
+// ======================================
+
+window.editar = async function (id) {
 
     try {
 
         const resposta =
-        await fetch(`/gatos/${id}`);
+            await fetch(`/gatos/${id}`);
 
         const gato =
-        await resposta.json();
+            await resposta.json();
+
+        idEditando = id;
+
+        document.getElementById("nomeGato").value =
+            gato.nome_gato;
+
+        document.getElementById("idade").value =
+            gato.idade;
+
+        document.getElementById("sexo").value =
+            gato.sexo;
+
+        document.getElementById("cor").value =
+            gato.cor;
+
+        mostrar("painelAdmin");
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro ao buscar gato.");
+
+    }
+
+};
+
+
+// ======================================
+// EXCLUIR GATO
+// ======================================
+
+window.excluir = async function (id) {
+
+    const confirmar = confirm(
+
+        "Deseja realmente excluir este gato?"
+
+    );
+
+    if (!confirmar) return;
+
+    try {
+
+        await fetch(`/gatos/${id}`, {
+
+            method: "DELETE"
+
+        });
+
+        alert("Gato excluído com sucesso!");
+
+        carregarGatosAdmin();
+
+    }
+
+    catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro ao excluir gato.");
+
+    }
+
+};
+
+
+// ======================================
+// ESCOLHER GATO
+// ======================================
+
+window.escolherGato = async function (id, imagem) {
+
+    try {
+
+        const resposta =
+            await fetch(`/gatos/${id}`);
+
+        const gato =
+            await resposta.json();
 
         document
             .getElementById("imgGato")
@@ -126,23 +405,42 @@ window.escolherGato = async function(id, imagem) {
 
         mostrar("adocao");
 
-    } catch (erro) {
+    }
 
-        alert("Erro ao carregar gato 😢");
+    catch (erro) {
 
         console.error(erro);
+
+        alert("Erro ao carregar o gato.");
+
     }
+
 };
 
 
-// FORMULÁRIO ADOÇÃO
+// ======================================
+// FORMULÁRIO DE ADOÇÃO
+// ======================================
+
 document
     .getElementById("formAdocao")
-    .addEventListener("submit", function(e) {
+    .addEventListener("submit", function (e) {
 
         e.preventDefault();
 
-        alert("Solicitação enviada 🐱");
+        alert("Solicitação enviada com sucesso!");
 
         mostrar("gatos");
+
     });
+
+
+// ======================================
+// CARREGAR GATOS AO ABRIR A PÁGINA
+// ======================================
+
+window.onload = function () {
+
+    carregarGatos();
+
+};
