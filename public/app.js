@@ -88,19 +88,31 @@ document
 
         const gato = {
 
-            nome_gato:
-                document.getElementById("nomeGato").value,
+    nome_gato:
+        document.getElementById("nomeGato").value,
 
-            idade:
-                document.getElementById("idade").value,
+    idade:
+        document.getElementById("idade").value,
 
-            sexo:
-                document.getElementById("sexo").value,
+    sexo:
+        document.getElementById("sexo").value,
 
-            cor:
-                document.getElementById("cor").value
+    cor:
+        document.getElementById("cor").value,
 
-        };
+    porte:
+        document.getElementById("porte").value,
+
+    temperamento:
+        document.getElementById("temperamento").value,
+
+    status:
+        document.getElementById("status").value,
+
+    historico_tratamento:
+        document.getElementById("historico").value
+
+};
 
         try {
 
@@ -176,35 +188,39 @@ async function carregarGatos() {
 
         lista.innerHTML = "";
 
-        gatos.forEach((gato, index) => {
+       gatos.forEach((gato, index) => {
 
-            lista.innerHTML += `
+    const imagem =
+        index < 3
+            ? `gato${index + 1}.jpg`
+            : "placeholder.jpg";
 
-            <div class="card">
+    lista.innerHTML += `
 
-                <img
-                src="gato${index + 1}.jpg"
-                alt="Gato">
+    <div class="card">
 
-                <h3>${gato.nome_gato}</h3>
+        <img
+            src="${imagem}"
+            alt="Gato">
 
-                <p>${gato.idade} • ${gato.sexo}</p>
+        <h3>${gato.nome_gato}</h3>
 
-                <p>${gato.cor}</p>
+        <p>${gato.idade} • ${gato.sexo}</p>
 
-                <button
-                onclick="escolherGato(${gato.id_gato}, ${index + 1})">
+        <p>${gato.cor}</p>
 
-                    Adotar
+        <button
+            onclick="escolherGato(${gato.id_gato}, '${imagem}')">
 
-                </button>
+            Adotar
 
-            </div>
+        </button>
 
-            `;
+    </div>
 
-        });
+    `;
 
+});
     }
 
     catch (erro) {
@@ -233,38 +249,47 @@ async function carregarGatosAdmin() {
 
         lista.innerHTML = "";
 
-        gatos.forEach((gato) => {
+        gatos.forEach((gato, index) => {
+
+            const imagem =
+                index < 3
+                    ? `gato${index + 1}.jpg`
+                    : "placeholder.jpg";
 
             lista.innerHTML += `
 
-                <div class="card">
+            <div class="card">
 
-                    <h3>${gato.nome_gato}</h3>
+                <img
+                    src="${imagem}"
+                    alt="Gato">
 
-                    <p><strong>Idade:</strong> ${gato.idade}</p>
+                <h3>${gato.nome_gato}</h3>
 
-                    <p><strong>Sexo:</strong> ${gato.sexo}</p>
+                <p><strong>Idade:</strong> ${gato.idade}</p>
 
-                    <p><strong>Cor:</strong> ${gato.cor}</p>
+                <p><strong>Sexo:</strong> ${gato.sexo}</p>
 
-                    <br>
+                <p><strong>Cor:</strong> ${gato.cor}</p>
 
-                    <button
-                        onclick="editar(${gato.id_gato})">
+                <br>
 
-                        Editar
+                <button
+                    onclick="editar(${gato.id_gato})">
 
-                    </button>
+                    Editar
 
-                    <button
-                        style="background:#d9534f; margin-top:10px;"
-                        onclick="excluir(${gato.id_gato})">
+                </button>
 
-                        Excluir
+                <button
+                    style="background:#d9534f;margin-left:10px"
+                    onclick="excluir(${gato.id_gato})">
 
-                    </button>
+                    Excluir
 
-                </div>
+                </button>
+
+            </div>
 
             `;
 
@@ -281,7 +306,6 @@ async function carregarGatosAdmin() {
     }
 
 }
-
 
 // ======================================
 // EDITAR GATO
@@ -388,8 +412,9 @@ window.escolherGato = async function (id, imagem) {
             await resposta.json();
 
         document
-            .getElementById("imgGato")
-            .src = `gato${imagem}.jpg`;
+        .getElementById("imgGato")
+        .src = imagem;
+    
 
         document
             .getElementById("nomeGato")
