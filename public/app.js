@@ -323,19 +323,16 @@ window.editar = async function (id) {
 
         idEditando = id;
 
-        document.getElementById("nomeGato").value =
-            gato.nome_gato;
+    document.getElementById("editarNome").value = gato.nome_gato;
+    document.getElementById("editarIdade").value = gato.idade;
+    document.getElementById("editarSexo").value = gato.sexo;
+    document.getElementById("editarCor").value = gato.cor;
+    document.getElementById("editarPorte").value = gato.porte;
+    document.getElementById("editarTemperamento").value = gato.temperamento || "";
+    document.getElementById("editarStatus").value = gato.status;
+    document.getElementById("editarHistorico").value = gato.historico_tratamento || "";
 
-        document.getElementById("idade").value =
-            gato.idade;
-
-        document.getElementById("sexo").value =
-            gato.sexo;
-
-        document.getElementById("cor").value =
-            gato.cor;
-
-        mostrar("painelAdmin");
+      mostrar("editarGato");
 
         window.scrollTo({
 
@@ -469,3 +466,47 @@ window.onload = function () {
     carregarGatos();
 
 };
+
+document
+    .getElementById("formEditarGato")
+    .addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const gato = {
+
+            nome_gato: document.getElementById("editarNome").value,
+            idade: document.getElementById("editarIdade").value,
+            sexo: document.getElementById("editarSexo").value,
+            cor: document.getElementById("editarCor").value,
+            porte: document.getElementById("editarPorte").value,
+            temperamento: document.getElementById("editarTemperamento").value,
+            status: document.getElementById("editarStatus").value,
+            historico_tratamento: document.getElementById("editarHistorico").value
+
+        };
+
+        await fetch(`/gatos/${idEditando}`, {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(gato)
+
+        });
+
+        alert("Gato atualizado com sucesso!");
+
+        idEditando = null;
+
+        this.reset();
+
+        mostrar("painelAdmin");
+
+        carregarGatosAdmin();
+        carregarGatos();
+
+    });
