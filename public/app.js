@@ -45,7 +45,6 @@ document
             alert("Digite um Gmail válido!");
 
             return;
-
         }
 
         alert("Cadastro realizado com sucesso!");
@@ -88,31 +87,31 @@ document
 
         const gato = {
 
-    nome_gato:
-        document.getElementById("nomeGato").value,
+            nome_gato:
+                document.getElementById("nomeGato").value,
 
-    idade:
-        document.getElementById("idade").value,
+            idade:
+                document.getElementById("idade").value,
 
-    sexo:
-        document.getElementById("sexo").value,
+            sexo:
+                document.getElementById("sexo").value,
 
-    cor:
-        document.getElementById("cor").value,
+            cor:
+                document.getElementById("cor").value,
 
-    porte:
-        document.getElementById("porte").value,
+            porte:
+                document.getElementById("porte").value,
 
-    temperamento:
-        document.getElementById("temperamento").value,
+            temperamento:
+                document.getElementById("temperamento").value,
 
-    status:
-        document.getElementById("status").value,
+            status:
+                document.getElementById("status").value,
 
-    historico_tratamento:
-        document.getElementById("historico").value
+            historico_tratamento:
+                document.getElementById("historico").value
 
-};
+        };
 
         try {
 
@@ -188,39 +187,46 @@ async function carregarGatos() {
 
         lista.innerHTML = "";
 
-       gatos.forEach((gato, index) => {
+        gatos.forEach((gato, index) => {
 
-    const imagem =
-        index < 3
-            ? `gato${index + 1}.jpg`
-            : "placeholder.jpg";
+            const imagem =
+                index < 3
+                    ? `gato${index + 1}.jpg`
+                    : "placeholder.jpg";
 
-    lista.innerHTML += `
+            lista.innerHTML += `
 
-    <div class="card">
+                <div class="card">
 
-        <img
-            src="${imagem}"
-            alt="Gato">
+                    <img
+                        src="${imagem}"
+                        alt="Gato">
 
-        <h3>${gato.nome_gato}</h3>
+                    <h3>
+                        ${gato.nome_gato}
+                    </h3>
 
-        <p>${gato.idade} • ${gato.sexo}</p>
+                    <p>
+                        ${gato.idade} • ${gato.sexo}
+                    </p>
 
-        <p>${gato.cor}</p>
+                    <p>
+                        ${gato.cor}
+                    </p>
 
-        <button
-            onclick="escolherGato(${gato.id_gato}, '${imagem}')">
+                    <button
+                        onclick="escolherGato(${gato.id_gato}, '${imagem}')">
 
-            Adotar
+                        Adotar
 
-        </button>
+                    </button>
 
-    </div>
+                </div>
 
-    `;
+            `;
 
-});
+        });
+
     }
 
     catch (erro) {
@@ -232,6 +238,8 @@ async function carregarGatos() {
     }
 
 }
+
+
 // ======================================
 // CARREGAR GATOS (ADMINISTRADOR)
 // ======================================
@@ -258,38 +266,49 @@ async function carregarGatosAdmin() {
 
             lista.innerHTML += `
 
-            <div class="card">
+                <div class="card">
 
-                <img
-                    src="${imagem}"
-                    alt="Gato">
+                    <img
+                        src="${imagem}"
+                        alt="Gato">
 
-                <h3>${gato.nome_gato}</h3>
+                    <h3>
+                        ${gato.nome_gato}
+                    </h3>
 
-                <p><strong>Idade:</strong> ${gato.idade}</p>
+                    <p>
+                        <strong>Idade:</strong>
+                        ${gato.idade}
+                    </p>
 
-                <p><strong>Sexo:</strong> ${gato.sexo}</p>
+                    <p>
+                        <strong>Sexo:</strong>
+                        ${gato.sexo}
+                    </p>
 
-                <p><strong>Cor:</strong> ${gato.cor}</p>
+                    <p>
+                        <strong>Cor:</strong>
+                        ${gato.cor}
+                    </p>
 
-                <br>
+                    <br>
 
-                <button
-                    onclick="editar(${gato.id_gato})">
+                    <button
+                        onclick="editar(${gato.id_gato})">
 
-                    Editar
+                        Editar
 
-                </button>
+                    </button>
 
-                <button
-                    style="background:#d9534f;margin-left:10px"
-                    onclick="excluir(${gato.id_gato})">
+                    <button
+                        style="background:#d9534f;margin-left:10px"
+                        onclick="excluir(${gato.id_gato})">
 
-                    Excluir
+                        Excluir
 
-                </button>
+                    </button>
 
-            </div>
+                </div>
 
             `;
 
@@ -307,6 +326,7 @@ async function carregarGatosAdmin() {
 
 }
 
+
 // ======================================
 // EDITAR GATO
 // ======================================
@@ -323,16 +343,31 @@ window.editar = async function (id) {
 
         idEditando = id;
 
-    document.getElementById("editarNome").value = gato.nome_gato;
-    document.getElementById("editarIdade").value = gato.idade;
-    document.getElementById("editarSexo").value = gato.sexo;
-    document.getElementById("editarCor").value = gato.cor;
-    document.getElementById("editarPorte").value = gato.porte;
-    document.getElementById("editarTemperamento").value = gato.temperamento || "";
-    document.getElementById("editarStatus").value = gato.status;
-    document.getElementById("editarHistorico").value = gato.historico_tratamento || "";
+        document.getElementById("editarNome").value =
+            gato.nome_gato;
 
-      mostrar("editarGato");
+        document.getElementById("editarIdade").value =
+            gato.idade;
+
+        document.getElementById("editarSexo").value =
+            gato.sexo;
+
+        document.getElementById("editarCor").value =
+            gato.cor;
+
+        document.getElementById("editarPorte").value =
+            gato.porte;
+
+        document.getElementById("editarTemperamento").value =
+            gato.temperamento || "";
+
+        document.getElementById("editarStatus").value =
+            gato.status;
+
+        document.getElementById("editarHistorico").value =
+            gato.historico_tratamento || "";
+
+        mostrar("editarGato");
 
         window.scrollTo({
 
@@ -362,9 +397,7 @@ window.editar = async function (id) {
 window.excluir = async function (id) {
 
     const confirmar = confirm(
-
         "Deseja realmente excluir este gato?"
-
     );
 
     if (!confirmar) return;
@@ -409,9 +442,8 @@ window.escolherGato = async function (id, imagem) {
             await resposta.json();
 
         document
-        .getElementById("imgGato")
-        .src = imagem;
-    
+            .getElementById("imgGato")
+            .src = imagem;
 
         document
             .getElementById("nomeGato")
@@ -467,6 +499,11 @@ window.onload = function () {
 
 };
 
+
+// ======================================
+// FORMULÁRIO DE EDIÇÃO
+// ======================================
+
 document
     .getElementById("formEditarGato")
     .addEventListener("submit", async function (e) {
@@ -475,14 +512,29 @@ document
 
         const gato = {
 
-            nome_gato: document.getElementById("editarNome").value,
-            idade: document.getElementById("editarIdade").value,
-            sexo: document.getElementById("editarSexo").value,
-            cor: document.getElementById("editarCor").value,
-            porte: document.getElementById("editarPorte").value,
-            temperamento: document.getElementById("editarTemperamento").value,
-            status: document.getElementById("editarStatus").value,
-            historico_tratamento: document.getElementById("editarHistorico").value
+            nome_gato:
+                document.getElementById("editarNome").value,
+
+            idade:
+                document.getElementById("editarIdade").value,
+
+            sexo:
+                document.getElementById("editarSexo").value,
+
+            cor:
+                document.getElementById("editarCor").value,
+
+            porte:
+                document.getElementById("editarPorte").value,
+
+            temperamento:
+                document.getElementById("editarTemperamento").value,
+
+            status:
+                document.getElementById("editarStatus").value,
+
+            historico_tratamento:
+                document.getElementById("editarHistorico").value
 
         };
 
@@ -491,7 +543,9 @@ document
             method: "PUT",
 
             headers: {
+
                 "Content-Type": "application/json"
+
             },
 
             body: JSON.stringify(gato)
@@ -507,6 +561,7 @@ document
         mostrar("painelAdmin");
 
         carregarGatosAdmin();
+
         carregarGatos();
 
     });

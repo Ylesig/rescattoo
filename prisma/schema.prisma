@@ -22,7 +22,6 @@ model Usuario {
 
   @@map("Usuario")
 }
-}
 
 model Gato {
   id_gato                  Int      @id @default(autoincrement())
