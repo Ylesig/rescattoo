@@ -8,16 +8,38 @@ import {
   deleteGato
 } from "../controllers/gatoController.js";
 
+import { autenticar } from "../middlewares/authMiddleware.js";
+
 const router = express.Router();
+
+// ======================================
+// ROTAS PÚBLICAS
+// ======================================
 
 router.get("/gatos", getGatos);
 
 router.get("/gatos/:id", getGato);
 
-router.post("/gatos", postGato);
+// ======================================
+// ROTAS PROTEGIDAS
+// ======================================
 
-router.put("/gatos/:id", putGato);
+router.post(
+  "/gatos",
+  autenticar,
+  postGato
+);
 
-router.delete("/gatos/:id", deleteGato);
+router.put(
+  "/gatos/:id",
+  autenticar,
+  putGato
+);
+
+router.delete(
+  "/gatos/:id",
+  autenticar,
+  deleteGato
+);
 
 export default router;

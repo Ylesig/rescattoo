@@ -107,3 +107,94 @@ Content-Type: application/json
 
 DELETE http://localhost:3000/gatos/999
 
+### ===================================
+### AUTENTICAÇÃO - CADASTRAR USUÁRIO
+### ===================================
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Gisely",
+  "endereco": "João Pessoa",
+  "contato": "gisely@gmail.com",
+  "senha": "123456",
+  "perfil": "usuario"
+}
+
+###
+
+### ===================================
+### AUTENTICAÇÃO - CADASTRO COM EMAIL EXISTENTE
+### ===================================
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Gisely 2",
+  "endereco": "João Pessoa",
+  "contato": "gisely@gmail.com",
+  "senha": "654321",
+  "perfil": "usuario"
+}
+
+###
+
+### ===================================
+### AUTENTICAÇÃO - LOGIN CORRETO
+### ===================================
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "contato": "gisely@gmail.com",
+  "senha": "123456"
+}
+
+###
+
+### ===================================
+### AUTENTICAÇÃO - LOGIN COM SENHA ERRADA
+### ===================================
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "contato": "gisely@gmail.com",
+  "senha": "senhaerrada"
+}
+
+###
+
+### ===================================
+### AUTENTICAÇÃO - LOGIN COM USUÁRIO INEXISTENTE
+### ===================================
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "contato": "naoexiste@gmail.com",
+  "senha": "123456"
+}
+
+###
+
+### ===================================
+### ROTA PROTEGIDA - SEM TOKEN
+### ===================================
+
+GET http://localhost:3000/auth/perfil
+
+###
+
+### ===================================
+### ROTA PROTEGIDA - COM TOKEN
+### ===================================
+
+GET http://localhost:3000/auth/perfil
+Authorization: Bearer COLAR_TOKEN
+

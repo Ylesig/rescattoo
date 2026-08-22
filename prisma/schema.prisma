@@ -12,6 +12,7 @@ model Usuario {
   nome         String
   endereco     String
   contato      String  @unique
+  senha        String
   perfil       String
 
   comunicacoes Comunicacao[]
@@ -20,6 +21,7 @@ model Usuario {
   doacoes      Doacao[]
 
   @@map("Usuario")
+}
 }
 
 model Gato {
