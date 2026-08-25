@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../prisma.js";
-const JWT_SECRET = process.env.JWT_SECRET || "rescatto_chave_secreta_2026";
+import { ADMIN_REGISTRATION_KEYS, JWT_EXPIRES_IN, JWT_SECRET } from "../config.js";
+const EMAIL_REGEX = /^(?!.*\.\.)[a-z0-9](?:[a-z0-9._%+-]*[a-z0-9])?@gmail\.com$/i;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,72}$/;
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET não configurado no ambiente.");
 }
@@ -10,23 +12,29 @@ if (!JWT_SECRET) {
 // ======================================
 export async function cadastrarUsuario(req, res) {
     try {
-        const { nome, endereco, contato, senha, perfil } = req.body;
-        // Validação dos campos
-        if (!nome || !contato || !senha) {
+        const { nome, endereco, contato, senha, perfil, } = req.body;
+        if (perfil !== undefined && perfil !== "usuario" && perfil !== "admin") {
+            return res.status(400).json({ erro: "Perfil de cadastro inválido." });
+        }
+        const nomeNormalizado = typeof nome === "string" ? nome.trim() : "";
+        const contatoNormalizado = typeof contato === "string" ? contato.trim().toLowerCase() : "";
+        if (!nomeNormalizado || !contatoNormalizado || typeof senha !== "string") {
             return res.status(400).json({
                 erro: "Nome, e-mail e senha são obrigatórios."
             });
         }
-        // Validação mínima da senha
-        if (senha.length < 6) {
+        if (contatoNormalizado.length > 254 || !EMAIL_REGEX.test(contatoNormalizado)) {
+            return res.status(400).json({ erro: "Informe um e-mail Gmail válido, como nome@gmail.com." });
+        }
+        if (!PASSWORD_REGEX.test(senha)) {
             return res.status(400).json({
-                erro: "A senha deve possuir pelo menos 6 caracteres."
+                erro: "A senha deve ter de 8 a 72 caracteres, com maiúscula, minúscula e número."
             });
         }
         // Verifica se o e-mail já existe
         const usuarioExistente = await prisma.usuario.findUnique({
             where: {
-                contato
+                contato: contatoNormalizado
             }
         });
         if (usuarioExistente) {
@@ -34,16 +42,20 @@ export async function cadastrarUsuario(req, res) {
                 erro: "Este e-mail já está cadastrado."
             });
         }
+        const isAdminRegistration = perfil === "admin";
+        const adminKey = req.headers["x-admin-key"];
+        if (isAdminRegistration && (typeof adminKey !== "string" || !ADMIN_REGISTRATION_KEYS.includes(adminKey))) {
+            return res.status(403).json({ erro: "Chave de cadastro administrativa inválida." });
+        }
         // Cria o HASH da senha
         const senhaHash = await bcrypt.hash(senha, 10);
-        // Cria usuário no banco
         const usuario = await prisma.usuario.create({
             data: {
-                nome,
+                nome: nomeNormalizado,
                 endereco: endereco || "",
-                contato,
+                contato: contatoNormalizado,
                 senha: senhaHash,
-                perfil: perfil || "usuario"
+                perfil: isAdminRegistration ? "admin" : "usuario"
             }
         });
         return res.status(201).json({
@@ -68,16 +80,28 @@ export async function cadastrarUsuario(req, res) {
 // ======================================
 export async function loginUsuario(req, res) {
     try {
-        const { contato, senha } = req.body;
-        if (!contato || !senha) {
+        const { contato, senha, perfil } = req.body;
+        const contatoNormalizado = typeof contato === "string" ? contato.trim().toLowerCase() : "";
+        if (!contatoNormalizado || typeof senha !== "string" || !senha) {
             return res.status(400).json({
                 erro: "E-mail e senha são obrigatórios."
             });
         }
+        if (contatoNormalizado.length > 254 || !EMAIL_REGEX.test(contatoNormalizado)) {
+            return res.status(400).json({ erro: "Informe um e-mail Gmail válido, como nome@gmail.com." });
+        }
+        if (!PASSWORD_REGEX.test(senha)) {
+            return res.status(400).json({
+                erro: "A senha deve ter de 8 a 72 caracteres, com maiúscula, minúscula e número."
+            });
+        }
+        if (perfil !== undefined && perfil !== "usuario" && perfil !== "admin") {
+            return res.status(400).json({ erro: "Perfil de login inválido." });
+        }
         // Procura o usuário pelo e-mail
         const usuario = await prisma.usuario.findUnique({
             where: {
-                contato
+                contato: contatoNormalizado
             }
         });
         // Usuário inexistente
@@ -85,6 +109,9 @@ export async function loginUsuario(req, res) {
             return res.status(401).json({
                 erro: "E-mail ou senha incorretos."
             });
+        }
+        if (perfil && usuario.perfil !== perfil) {
+            return res.status(401).json({ erro: "As credenciais não pertencem ao perfil selecionado." });
         }
         // Compara senha digitada com o HASH armazenado
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
@@ -100,7 +127,7 @@ export async function loginUsuario(req, res) {
             contato: usuario.contato,
             perfil: usuario.perfil
         }, JWT_SECRET, {
-            expiresIn: "2h"
+            expiresIn: JWT_EXPIRES_IN
         });
         return res.status(200).json({
             mensagem: "Login realizado com sucesso!",
@@ -119,4 +146,7 @@ export async function loginUsuario(req, res) {
             erro: "Erro ao realizar login."
         });
     }
+}
+export function obterPerfil(req, res) {
+    return res.status(200).json({ usuario: req.usuario });
 }

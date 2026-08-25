@@ -118,8 +118,26 @@ Content-Type: application/json
   "nome": "Gisely",
   "endereco": "João Pessoa",
   "contato": "gisely@gmail.com",
-  "senha": "123456",
+  "senha": "Senha123",
   "perfil": "usuario"
+}
+
+###
+
+### ===================================
+### AUTENTICAÇÃO - CADASTRAR ADMINISTRADOR
+### ===================================
+
+POST http://localhost:3000/auth/register
+X-Admin-Key: COLOCAR_CHAVE_ADMINISTRATIVA
+Content-Type: application/json
+
+{
+  "nome": "Administrador",
+  "endereco": "João Pessoa",
+  "contato": "admin@rescatto.com",
+  "senha": "Senha789",
+  "perfil": "admin"
 }
 
 ###
@@ -135,7 +153,7 @@ Content-Type: application/json
   "nome": "Gisely 2",
   "endereco": "João Pessoa",
   "contato": "gisely@gmail.com",
-  "senha": "654321",
+  "senha": "Senha456",
   "perfil": "usuario"
 }
 
@@ -150,7 +168,7 @@ Content-Type: application/json
 
 {
   "contato": "gisely@gmail.com",
-  "senha": "123456"
+  "senha": "Senha123"
 }
 
 ###
@@ -178,7 +196,7 @@ Content-Type: application/json
 
 {
   "contato": "naoexiste@gmail.com",
-  "senha": "123456"
+  "senha": "Senha123"
 }
 
 ###
@@ -197,4 +215,23 @@ GET http://localhost:3000/auth/perfil
 
 GET http://localhost:3000/auth/perfil
 Authorization: Bearer COLAR_TOKEN
+
+###
+
+### ===================================
+### ROTA PROTEGIDA - CRIAR GATO COM TOKEN
+### ===================================
+
+POST http://localhost:3000/gatos
+Authorization: Bearer COLAR_TOKEN
+Content-Type: application/json
+
+{
+  "nome_gato": "Nina protegida",
+  "idade": "2 meses",
+  "sexo": "F",
+  "cor": "Cinza",
+  "porte": "Pequeno",
+  "status": "Disponivel"
+}
 

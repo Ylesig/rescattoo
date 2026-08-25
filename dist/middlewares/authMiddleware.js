@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET || "rescatto_chave_secreta_2026";
+import { JWT_SECRET } from "../config.js";
 if (!JWT_SECRET) {
     throw new Error("JWT_SECRET não configurado no ambiente.");
 }

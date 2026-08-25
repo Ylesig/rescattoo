@@ -16,9 +16,9 @@ const router = express.Router();
 // ROTAS PÚBLICAS
 // ======================================
 
-router.get("/gatos", getGatos);
+router.get("/gatos", autenticar, getGatos);
 
-router.get("/gatos/:id", getGato);
+router.get("/gatos/:id", autenticar, getGato);
 
 // ======================================
 // ROTAS PROTEGIDAS
