@@ -13,7 +13,7 @@ Abra `teste.http` com a extensao REST Client do VS Code, execute cadastro e logi
 
 No front-end, os formularios chamam a API, o token e o usuario ficam em `localStorage` para sobreviver ao fechamento da aba, o cabecalho mostra o usuario e `Sair` encerra a sessao. Operacoes de gatos enviam o Bearer automaticamente.
 
-Copie `.env.example` para `.env` e defina `JWT_SECRET` com valor forte. `DATABASE_URL="file:./rescatto.db"` aponta para o banco local; o caminho e relativo a `prisma/schema.prisma`.
+Durante `npm install`, se `.env` ainda nao existir, ele e criado automaticamente a partir de `.env.example`. O arquivo `.env` continua fora do Git; para manter uma chave personalizada entre Codespaces, configure `JWT_SECRET` como segredo do Codespaces ou copie sua chave para o arquivo criado. `DATABASE_URL="file:./rescatto.db"` aponta para o banco local; o caminho e relativo a `prisma/schema.prisma`.
 
 ## Executar
 

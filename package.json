@@ -5,8 +5,13 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "setup:env": "node scripts/ensure-env.mjs",
+    "db:deploy": "prisma migrate deploy",
+    "postinstall": "npm run setup:env",
+    "predev": "npm run db:deploy",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "prestart": "npm run db:deploy",
     "start": "npm run build && node dist/index.js",
     "seed": "tsx prisma/seed.ts"
   },

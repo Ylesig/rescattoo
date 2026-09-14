@@ -3,6 +3,8 @@
 // ======================================
 
 let idEditando = null;
+let secaoAtual = "inicio";
+const historicoNavegacao = [];
 
 const token = () => localStorage.getItem("rescatto_token");
 
@@ -53,17 +55,25 @@ async function mensagemErro(resposta, padrao) {
 
 window.logout = function () {
     limparSessao();
+    historicoNavegacao.length = 0;
+    secaoAtual = "inicio";
     document.getElementById("formCadastro").reset();
     document.querySelectorAll("[data-formulario]").forEach(item => item.classList.remove("ativa"));
     document.querySelector("[data-formulario='usuario']").classList.add("ativa");
     mostrar("inicio");
 };
 
-window.mostrar = function (id) {
-    const areasProtegidas = ["gatos", "adocao", "painelAdmin", "editarGato"];
+window.mostrar = function (id, registrarHistorico = true) {
+    const areasProtegidas = ["gatos", "adocao", "painelAdmin", "cadastroGato", "editarGato"];
     if (areasProtegidas.includes(id) && !token()) {
         mostrarMensagem("erroLogin", "Cadastre-se e faça login para acessar os gatos e os processos de adoção.");
         id = "login";
+    }
+
+    if (id === secaoAtual) return;
+
+    if (registrarHistorico) {
+        historicoNavegacao.push(secaoAtual);
     }
 
     document
@@ -75,6 +85,12 @@ window.mostrar = function (id) {
     document
         .getElementById(id)
         .classList.add("active");
+    secaoAtual = id;
+};
+
+window.voltar = function () {
+    const secaoAnterior = historicoNavegacao.pop() || "inicio";
+    window.mostrar(secaoAnterior, false);
 };
 
 
@@ -192,8 +208,13 @@ document
         this.reset();
         try {
             await validarSessao();
-            mostrar(dados.usuario.perfil === "admin" ? "painelAdmin" : "gatos");
-            await carregarGatos();
+            const secaoInicial = dados.usuario.perfil === "admin" ? "painelAdmin" : "gatos";
+            mostrar(secaoInicial);
+            if (dados.usuario.perfil === "admin") {
+                await carregarGatosAdmin();
+            } else {
+                await carregarGatos();
+            }
         } catch (erro) {
             limparSessao();
             mostrarMensagem("erroLogin", "Login realizado, mas a sessão não foi validada. Reinicie o servidor e tente novamente.");
@@ -282,7 +303,7 @@ document
             }
 
             this.reset();
-
+            mostrar("painelAdmin");
             carregarGatosAdmin();
 
         }
@@ -388,7 +409,10 @@ async function carregarGatosAdmin() {
 
     try {
 
-        const resposta = await fetch("/gatos");
+        const resposta = await fetch("/gatos", {
+            headers: cabecalhoAutenticado(),
+            cache: "no-store"
+        });
 
         if (resposta.status === 401) {
             logout();
@@ -549,12 +573,16 @@ window.excluir = async function (id) {
 
     try {
 
-        await fetch(`/gatos/${id}`, {
+        const resposta = await fetch(`/gatos/${id}`, {
 
             method: "DELETE",
             headers: cabecalhoAutenticado()
 
         });
+
+        if (!resposta.ok) {
+            throw new Error(await mensagemErro(resposta, "Não foi possível excluir o gato."));
+        }
 
         alert("Gato excluído com sucesso!");
 
@@ -656,7 +684,9 @@ window.onload = function () {
         .then(dados => {
             localStorage.setItem("rescatto_usuario", JSON.stringify(dados.usuario));
             atualizarEstadoAutenticacao(dados.usuario);
-            carregarGatos();
+            const secaoInicial = dados.usuario.perfil === "admin" ? "painelAdmin" : "gatos";
+            mostrar(secaoInicial, false);
+            return dados.usuario.perfil === "admin" ? carregarGatosAdmin() : carregarGatos();
         })
         .catch(() => {
             limparSessao();

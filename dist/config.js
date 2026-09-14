@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import path from "node:path";
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 dotenv.config({ path: path.resolve(process.cwd(), "env.env") });
+process.env.DATABASE_URL ||= "file:./rescatto.db";
 export const JWT_SECRET = process.env.JWT_SECRET || "rescatto_chave_secreta_2026";
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 if (JWT_SECRET === "rescatto_chave_secreta_2026") {

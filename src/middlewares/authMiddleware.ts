@@ -59,3 +59,17 @@ export function autenticar(
 
   }
 }
+
+export function exigirAdministrador(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) {
+  if (req.usuario?.perfil !== "admin") {
+    return res.status(403).json({
+      erro: "Acesso permitido apenas para administradores."
+    });
+  }
+
+  next();
+}

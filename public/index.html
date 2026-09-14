@@ -387,6 +387,15 @@
             color: white;
         }
 
+        .navegacao-secao {
+            max-width: 500px;
+            margin: 0 auto 20px;
+        }
+
+        .navegacao-secao button {
+            background: var(--azul-escuro);
+        }
+
         @media (max-width: 720px) {
             .nav-links { flex-wrap: wrap; justify-content: flex-end; }
             .nav-links li { margin-left: 6px; }
@@ -482,6 +491,10 @@
         id="cadastro"
         >
 
+        <div class="navegacao-secao">
+            <button type="button" onclick="voltar()">Voltar</button>
+        </div>
+
         <h2>Cadastre-se</h2>
 
         <div class="abas" role="tablist">
@@ -507,6 +520,9 @@
     </section>
 
     <section id="login">
+        <div class="navegacao-secao">
+            <button type="button" onclick="voltar()">Voltar</button>
+        </div>
         <h2>Entrar</h2>
         <div class="abas" role="tablist">
             <button type="button" class="aba ativa" data-login-perfil="usuario" role="tab">Usuário</button>
@@ -522,69 +538,49 @@
 
 <section id="painelAdmin">
 
+    <div class="navegacao-secao">
+        <button type="button" onclick="voltar()">Voltar</button>
+    </div>
+
     <h2>Painel do Administrador</h2>
 
-    <form id="formGato">
-
-        <input
-            type="text"
-            id="nomeGato"
-            placeholder="Nome do gato"
-            required>
-
-        <input
-            type="text"
-            id="idade"
-            placeholder="Idade"
-            required>
-
-        <input
-            type="text"
-            id="sexo"
-            placeholder="Sexo"
-            required>
-
-  <input
-    type="text"
-    id="cor"
-    placeholder="Cor"
-    required>
-
-<input
-    type="text"
-    id="porte"
-    placeholder="Porte"
-    required>
-
-<input
-    type="text"
-    id="temperamento"
-    placeholder="Temperamento">
-
-<input
-    type="text"
-    id="status"
-    placeholder="Status"
-    required>
-
-<input
-    type="text"
-    id="historico"
-    placeholder="Histórico de tratamento">
-
-<button type="submit">
-    Cadastrar gato
-</button>
-
-    </form>
+    <div class="navegacao-secao">
+        <button type="button" onclick="mostrar('cadastroGato')">Cadastrar gato</button>
+    </div>
 
     <br>
 
-    <div id="listaAdmin"></div>
+    <div id="listaAdmin" class="grid"></div>
+
+</section>
+
+<section id="cadastroGato">
+
+    <div class="navegacao-secao">
+        <button type="button" onclick="voltar()">Voltar</button>
+    </div>
+
+    <h2>Cadastrar gato</h2>
+
+    <form id="formGato">
+        <input type="text" id="nomeGato" placeholder="Nome do gato" required>
+        <input type="text" id="idade" placeholder="Idade" required>
+        <input type="text" id="sexo" placeholder="Sexo" required>
+        <input type="text" id="cor" placeholder="Cor" required>
+        <input type="text" id="porte" placeholder="Porte" required>
+        <input type="text" id="temperamento" placeholder="Temperamento">
+        <input type="text" id="status" placeholder="Status" required>
+        <input type="text" id="historico" placeholder="Histórico de tratamento">
+        <button type="submit">Cadastrar gato</button>
+    </form>
 
 </section>
 
 <section id="editarGato">
+
+    <div class="navegacao-secao">
+        <button type="button" onclick="voltar()">Voltar</button>
+    </div>
 
     <h2>Editar Gato</h2>
 
@@ -646,6 +642,10 @@
 
     <section id="gatos">
 
+        <div class="navegacao-secao">
+            <button type="button" onclick="voltar()">Voltar</button>
+        </div>
+
         <h2>
             Escolha um gatinho
         </h2>
@@ -660,6 +660,10 @@
 
 
     <section id="adocao">
+
+        <div class="navegacao-secao">
+            <button type="button" onclick="voltar()">Voltar</button>
+        </div>
 
         <h2>
             Formulário de Adoção
