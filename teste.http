@@ -117,8 +117,8 @@ Content-Type: application/json
 {
   "nome": "Gisely",
   "endereco": "João Pessoa",
-  "contato": "gisely@gmail.com",
-  "senha": "Senha123",
+  "contato": "gisely99@gmail.com",
+  "senha": "Senha456",
   "perfil": "usuario"
 }
 
@@ -167,8 +167,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "contato": "gisely@gmail.com",
-  "senha": "Senha123"
+  "contato": "gisely99@gmail.com",
+  "senha": "Senha456"
 }
 
 ###

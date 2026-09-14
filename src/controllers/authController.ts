@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../prisma.js";
 import { AuthRequest } from "../middlewares/authMiddleware.js";
-import { ADMIN_REGISTRATION_KEYS, JWT_EXPIRES_IN, JWT_SECRET } from "../config.js";
+import { JWT_EXPIRES_IN, JWT_SECRET } from "../config.js";
 
 const EMAIL_REGEX = /^(?!.*\.\.)[a-z0-9](?:[a-z0-9._%+-]*[a-z0-9])?@gmail\.com$/i;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,72}$/;
@@ -66,10 +66,6 @@ export async function cadastrarUsuario(
     }
 
     const isAdminRegistration = perfil === "admin";
-    const adminKey = req.headers["x-admin-key"];
-    if (isAdminRegistration && (typeof adminKey !== "string" || !ADMIN_REGISTRATION_KEYS.includes(adminKey))) {
-      return res.status(403).json({ erro: "Chave de cadastro administrativa inválida." });
-    }
 
     // Cria o HASH da senha
     const senhaHash = await bcrypt.hash(senha, 10);

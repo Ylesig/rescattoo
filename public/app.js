@@ -56,8 +56,6 @@ window.logout = function () {
     document.getElementById("formCadastro").reset();
     document.querySelectorAll("[data-formulario]").forEach(item => item.classList.remove("ativa"));
     document.querySelector("[data-formulario='usuario']").classList.add("ativa");
-    document.getElementById("campoChaveAdmin").hidden = true;
-    document.getElementById("cadastroChave").required = false;
     mostrar("inicio");
 };
 
@@ -89,9 +87,6 @@ document
     .forEach(aba => aba.addEventListener("click", function () {
         document.querySelectorAll("[data-formulario]").forEach(item => item.classList.remove("ativa"));
         this.classList.add("ativa");
-        const isAdmin = this.dataset.formulario === "admin";
-        document.getElementById("campoChaveAdmin").hidden = !isAdmin;
-        document.getElementById("cadastroChave").required = isAdmin;
     }));
 
 document
@@ -117,9 +112,6 @@ document
             return;
         }
         const headers = { "Content-Type": "application/json" };
-        if (perfil === "admin") {
-            headers["X-Admin-Key"] = document.getElementById("cadastroChave").value;
-        }
 
         const resposta = await fetch("/auth/register", {
             method: "POST",

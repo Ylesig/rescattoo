@@ -499,16 +499,6 @@
 
                 <input type="text" id="cadastroEndereco" placeholder="Cidade / endereço">
 
-                <div id="campoChaveAdmin" hidden>
-                    <details>
-                        <summary>Como criar a chave administrativa?</summary>
-                        <p>Execute no terminal:</p>
-                        <code>node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"</code>
-                        <p>Salve o resultado em <strong>ADMIN_REGISTRATION_KEY</strong> no arquivo <strong>env.env</strong> e reinicie o servidor.</p>
-                    </details>
-                    <input type="password" id="cadastroChave" placeholder="Chave administrativa">
-                </div>
-
                 <p id="erroCadastro" role="alert"></p>
                 <button type="submit">Criar conta</button>
 
