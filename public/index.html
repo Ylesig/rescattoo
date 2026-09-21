@@ -396,6 +396,21 @@
             background: var(--azul-escuro);
         }
 
+        #toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 10;
+            max-width: min(360px, calc(100vw - 40px));
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: white;
+            background: var(--azul-escuro);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+        }
+
+        #toast.erro { background: #a83232; }
+
         @media (max-width: 720px) {
             .nav-links { flex-wrap: wrap; justify-content: flex-end; }
             .nav-links li { margin-left: 6px; }
@@ -409,6 +424,8 @@
 </head>
 
 <body>
+
+    <div id="toast" role="status" hidden></div>
 
     <header>
 
@@ -504,13 +521,17 @@
 
         <form id="formCadastro">
 
-                <input type="text" id="cadastroNome" placeholder="Nome" required>
+                <input type="text" id="cadastroNome" name="nome" placeholder="Nome" minlength="2" required>
 
-                <input type="email" id="cadastroContato" placeholder="nome@gmail.com" maxlength="254" pattern="^[^\s@]+@gmail\.com$" required>
+                <input type="email" id="cadastroContato" name="contato" placeholder="nome@gmail.com" maxlength="254" pattern="^[^\s@]+@gmail\.com$" required>
 
-                <input type="password" id="cadastroSenha" placeholder="Senha" minlength="8" maxlength="72" required>
+                <input type="password" id="cadastroSenha" name="senha" placeholder="Senha" minlength="8" maxlength="72" required>
+
+                <input type="password" id="cadastroConfirmacao" name="confirmacao" placeholder="Confirme a senha" minlength="8" maxlength="72" required>
 
                 <input type="text" id="cadastroEndereco" placeholder="Cidade / endereço">
+
+                <input type="password" id="adminKey" placeholder="Chave administrativa (apenas admin)" autocomplete="off">
 
                 <p id="erroCadastro" role="alert"></p>
                 <button type="submit">Criar conta</button>

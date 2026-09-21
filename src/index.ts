@@ -4,6 +4,7 @@ import morgan from "morgan";
 
 import gatoRoutes from "./routes/gatoRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
@@ -25,7 +26,9 @@ app.use(authRoutes);
 // Rotas de gatos
 app.use(gatoRoutes);
 
-const PORT = 3000;
+app.use(errorHandler);
+
+const PORT = Number(process.env.PORT || 3000);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

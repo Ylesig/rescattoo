@@ -1,0 +1,86 @@
+@baseUrl = http://localhost:3000
+@token = COLAR_TOKEN_APOS_LOGIN
+@adminKey = CONFIGURAR_NO_ENV
+
+### Cadastro válido: dispara e-mail de boas-vindas
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Pessoa REST Client",
+  "endereco": "Joao Pessoa",
+  "contato": "restclient2026@gmail.com",
+  "senha": "Senha456",
+  "perfil": "usuario"
+}
+
+### Body inválido: 400 com issues.path e issues.message
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nome": "A",
+  "contato": "email-invalido",
+  "senha": "123"
+}
+
+### E-mail duplicado: 409 com issue no campo contato
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nome": "Pessoa Duplicada",
+  "endereco": "Joao Pessoa",
+  "contato": "restclient2026@gmail.com",
+  "senha": "Senha456",
+  "perfil": "usuario"
+}
+
+### Cadastro administrativo: exige ADMIN_KEY configurada
+POST {{baseUrl}}/auth/register
+X-Admin-Key: {{adminKey}}
+Content-Type: application/json
+
+{
+  "nome": "Administrador REST",
+  "endereco": "Joao Pessoa",
+  "contato": "admin-rest2026@gmail.com",
+  "senha": "Senha456",
+  "perfil": "admin"
+}
+
+### Parametro de rota invalido: 400
+GET {{baseUrl}}/gatos/abc
+Authorization: Bearer {{token}}
+
+### Query invalida: 400
+GET {{baseUrl}}/gatos?pagina=0&limite=101
+Authorization: Bearer {{token}}
+
+### Recurso inexistente: 404
+GET {{baseUrl}}/gatos/999999
+Authorization: Bearer {{token}}
+
+### Login para obter um token e testar as rotas protegidas
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "contato": "restclient2026@gmail.com",
+  "senha": "Senha456",
+  "perfil": "usuario"
+}
+
+### Listagem válida com query padrão
+GET {{baseUrl}}/gatos
+Authorization: Bearer {{token}}
+
+### JSON malformado: 400
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{"nome":"JSON quebrado"
+
+### Teste de falha SMTP (execução manual)
+# Inicie temporariamente com SMTP_HOST=127.0.0.1 SMTP_PORT=1 NODE_ENV=production.
+# O cadastro deve continuar respondendo 201 e o terminal deve registrar a falha.

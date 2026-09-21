@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
 import * as model from "../models/gatoModel.js";
+import { AppError } from "../middlewares/errorHandler.js";
+
+type GatoQuery = { status?: string; pagina: number; limite: number };
 
 // GET
 export async function getGatos(
   req: Request,
   res: Response
 ) {
-  try {
-    const gatos = await model.listarGatos();
-
-    res.json(gatos);
-  } catch {
-    res.status(500).json({
-      erro: "Erro ao buscar gatos",
-    });
-  }
+  const gatos = await model.listarGatos(req.query as unknown as GatoQuery);
+  res.json(gatos);
 }
 
 // GET ID
@@ -22,21 +18,11 @@ export async function getGato(
   req: Request<{ id: string }>,
   res: Response
 ) {
-  try {
-    const gato = await model.buscarGato(req.params.id);
-
-    if (!gato) {
-      return res.status(404).json({
-        erro: "Gato não encontrado",
-      });
-    }
-
-    res.json(gato);
-  } catch {
-    res.status(500).json({
-      erro: "Erro no servidor",
-    });
+  const gato = await model.buscarGato(req.params.id);
+  if (!gato) {
+    throw new AppError(404, "Gato não encontrado");
   }
+  res.json(gato);
 }
 
 // POST
@@ -44,39 +30,8 @@ export async function postGato(
   req: Request,
   res: Response
 ) {
-  try {
-    const {
-      nome_gato,
-      idade,
-      sexo,
-      cor,
-      porte,
-      status,
-    } = req.body;
-
-    if (
-      !nome_gato ||
-      !idade ||
-      !sexo ||
-      !cor ||
-      !porte ||
-      !status
-    ) {
-      return res.status(400).json({
-        erro: "Dados obrigatórios",
-      });
-    }
-
-    await model.criarGato(req.body);
-
-    res.status(201).json({
-      mensagem: "Gato criado",
-    });
-  } catch {
-    res.status(500).json({
-      erro: "Erro ao criar gato",
-    });
-  }
+  await model.criarGato(req.body);
+  res.status(201).json({ mensagem: "Gato criado" });
 }
 
 // PUT
@@ -84,52 +39,12 @@ export async function putGato(
   req: Request<{ id: string }>,
   res: Response
 ) {
-  try {
-
-    const {
-      nome_gato,
-      idade,
-      sexo,
-      cor,
-      porte,
-      status,
-    } = req.body;
-
-    if (
-      !nome_gato ||
-      !idade ||
-      !sexo ||
-      !cor ||
-      !porte ||
-      !status
-    ) {
-      return res.status(400).json({
-        erro: "Dados obrigatórios",
-      });
-    }
-
-    const gato = await model.buscarGato(req.params.id);
-
-    if (!gato) {
-      return res.status(404).json({
-        erro: "Gato não encontrado",
-      });
-    }
-
-    await model.atualizarGato(
-      req.params.id,
-      req.body
-    );
-
-    res.json({
-      mensagem: "Gato atualizado",
-    });
-
-  } catch {
-    res.status(500).json({
-      erro: "Erro ao atualizar",
-    });
+  const gato = await model.buscarGato(req.params.id);
+  if (!gato) {
+    throw new AppError(404, "Gato não encontrado");
   }
+  await model.atualizarGato(req.params.id, req.body);
+  res.json({ mensagem: "Gato atualizado" });
 }
 
 // DELETE
@@ -137,23 +52,10 @@ export async function deleteGato(
   req: Request<{ id: string }>,
   res: Response
 ) {
-  try {
-
-    const gato = await model.buscarGato(req.params.id);
-
-    if (!gato) {
-      return res.status(404).json({
-        erro: "Gato não encontrado",
-      });
-    }
-
-    await model.deletarGato(req.params.id);
-
-    res.status(204).send();
-
-  } catch {
-    res.status(500).json({
-      erro: "Erro ao deletar",
-    });
+  const gato = await model.buscarGato(req.params.id);
+  if (!gato) {
+    throw new AppError(404, "Gato não encontrado");
   }
+  await model.deletarGato(req.params.id);
+  res.status(204).send();
 }

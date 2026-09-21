@@ -1,6 +1,10 @@
 import prisma from "../prisma.js";
-export async function listarGatos() {
-    return await prisma.gato.findMany();
+export async function listarGatos(query) {
+    return await prisma.gato.findMany({
+        where: query.status ? { status: query.status } : undefined,
+        skip: (query.pagina - 1) * query.limite,
+        take: query.limite
+    });
 }
 export async function buscarGato(id) {
     return await prisma.gato.findUnique({

@@ -11,11 +11,15 @@ interface Gato {
   historico_tratamento?: string;
 }
 
-export async function listarGatos() {
-  return await prisma.gato.findMany();
+export async function listarGatos(query: { status?: string; pagina: number; limite: number }) {
+  return await prisma.gato.findMany({
+    where: query.status ? { status: query.status } : undefined,
+    skip: (query.pagina - 1) * query.limite,
+    take: query.limite
+  });
 }
 
-export async function buscarGato(id: string) {
+export async function buscarGato(id: string | number) {
   return await prisma.gato.findUnique({
     where: {
       id_gato: Number(id),
@@ -30,7 +34,7 @@ export async function criarGato(gato: Gato) {
 }
 
 export async function atualizarGato(
-  id: string,
+  id: string | number,
   gato: Gato
 ) {
   return await prisma.gato.update({
@@ -41,7 +45,7 @@ export async function atualizarGato(
   });
 }
 
-export async function deletarGato(id: string) {
+export async function deletarGato(id: string | number) {
   return await prisma.gato.delete({
     where: {
       id_gato: Number(id),

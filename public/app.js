@@ -44,9 +44,25 @@ function mostrarMensagem(id, mensagem) {
     elemento.hidden = !mensagem;
 }
 
+function mostrarToast(mensagem, tipo = "sucesso") {
+    const toast = document.getElementById("toast");
+    toast.textContent = mensagem;
+    toast.className = tipo === "erro" ? "erro" : "";
+    toast.hidden = false;
+    window.setTimeout(() => { toast.hidden = true; }, 4000);
+}
+
 async function mensagemErro(resposta, padrao) {
     try {
         const dados = await resposta.json();
+        if (dados.issues?.length) {
+            dados.issues.forEach(issue => {
+                const nomeCampo = issue.path.split(".").pop();
+                const campo = document.querySelector(`[name="${nomeCampo}"]`);
+                if (campo) campo.setCustomValidity(issue.message);
+            });
+            return dados.issues.map(issue => `${issue.path}: ${issue.message}`).join(" ");
+        }
         return dados.erro || padrao;
     } catch {
         return padrao;
@@ -99,6 +115,11 @@ window.voltar = function () {
 // ======================================
 
 document
+    .getElementById("formCadastro")
+    .querySelectorAll("input")
+    .forEach(campo => campo.addEventListener("input", () => campo.setCustomValidity("")));
+
+document
     .querySelectorAll("[data-formulario]")
     .forEach(aba => aba.addEventListener("click", function () {
         document.querySelectorAll("[data-formulario]").forEach(item => item.classList.remove("ativa"));
@@ -116,8 +137,17 @@ document
         const perfil = document.querySelector("[data-formulario].ativa").dataset.formulario;
         const contato = document.getElementById("cadastroContato").value.trim();
         const senha = document.getElementById("cadastroSenha").value;
+        const confirmacao = document.getElementById("cadastroConfirmacao").value;
         const emailValido = /^(?!.*\.\.)[a-z0-9](?:[a-z0-9._%+-]*[a-z0-9])?@gmail\.com$/i.test(contato);
         const senhaValida = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,72}$/.test(senha);
+
+        document.getElementById("cadastroConfirmacao").setCustomValidity(
+            senha === confirmacao ? "" : "As senhas precisam ser iguais."
+        );
+        if (senha !== confirmacao) {
+            this.reportValidity();
+            return;
+        }
 
         if (!emailValido) {
             mostrarMensagem("erroCadastro", "Informe um e-mail Gmail válido, como nome@gmail.com.");
@@ -128,21 +158,34 @@ document
             return;
         }
         const headers = { "Content-Type": "application/json" };
+        if (perfil === "admin") {
+            headers["X-Admin-Key"] = document.getElementById("adminKey").value;
+        }
 
-        const resposta = await fetch("/auth/register", {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-                nome: document.getElementById("cadastroNome").value,
-                contato,
-                senha,
-                endereco: document.getElementById("cadastroEndereco").value,
-                perfil
-            })
-        });
+        let resposta;
+        try {
+            resposta = await fetch("/auth/register", {
+                method: "POST",
+                headers,
+                body: JSON.stringify({
+                    nome: document.getElementById("cadastroNome").value,
+                    contato,
+                    senha,
+                    endereco: document.getElementById("cadastroEndereco").value,
+                    perfil
+                })
+            });
+        } catch {
+            const mensagem = "Não foi possível conectar ao servidor.";
+            mostrarMensagem("erroCadastro", mensagem);
+            mostrarToast(mensagem, "erro");
+            return;
+        }
 
         if (!resposta.ok) {
-            mostrarMensagem("erroCadastro", await mensagemErro(resposta, "Não foi possível criar a conta."));
+            const mensagem = await mensagemErro(resposta, "Não foi possível criar a conta.");
+            mostrarMensagem("erroCadastro", mensagem);
+            mostrarToast(mensagem, "erro");
             return;
         }
 
@@ -152,6 +195,7 @@ document
         document.querySelector(`[data-login-perfil='${perfil}']`).classList.add("ativa");
         document.getElementById("loginContato").value = contato;
         mostrarMensagem("erroLogin", `${perfil === "admin" ? "Administrador" : "Usuário"} cadastrado. Faça login para acessar os gatos.`);
+        mostrarToast("Cadastro concluído. Um e-mail de boas-vindas foi solicitado.");
         mostrar("login");
     });
 
@@ -197,7 +241,9 @@ document
         });
 
         if (!resposta.ok) {
-            mostrarMensagem("erroLogin", await mensagemErro(resposta, "E-mail ou senha incorretos."));
+            const mensagem = await mensagemErro(resposta, "E-mail ou senha incorretos.");
+            mostrarMensagem("erroLogin", mensagem);
+            mostrarToast(mensagem, "erro");
             return;
         }
 

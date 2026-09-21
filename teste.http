@@ -117,10 +117,37 @@ Content-Type: application/json
 {
   "nome": "Gisely",
   "endereco": "João Pessoa",
-  "contato": "gisely99@gmail.com",
+  "contato": "gisely999@gmail.com",
   "senha": "Senha456",
   "perfil": "usuario"
 }
+
+### ===================================
+### VALIDAÇÃO - BODY INVÁLIDO (400 + issues)
+### ===================================
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "nome": "A",
+  "contato": "email-invalido",
+  "senha": "123"
+}
+
+### ===================================
+### VALIDAÇÃO - PARÂMETRO INVÁLIDO (400)
+### ===================================
+
+GET http://localhost:3000/gatos/abc
+Authorization: Bearer COLAR_TOKEN
+
+### ===================================
+### VALIDAÇÃO - QUERY INVÁLIDA (400)
+### ===================================
+
+GET http://localhost:3000/gatos?pagina=0&limite=101
+Authorization: Bearer COLAR_TOKEN
 
 ###
 
@@ -129,7 +156,6 @@ Content-Type: application/json
 ### ===================================
 
 POST http://localhost:3000/auth/register
-X-Admin-Key: COLOCAR_CHAVE_ADMINISTRATIVA
 Content-Type: application/json
 
 {
@@ -214,7 +240,7 @@ GET http://localhost:3000/auth/perfil
 ### ===================================
 
 GET http://localhost:3000/auth/perfil
-Authorization: Bearer COLAR_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoyOCwibm9tZSI6Ikdpc2VseSIsImNvbnRhdG8iOiJnaXNlbHk5OTlAZ21haWwuY29tIiwicGVyZmlsIjoidXN1YXJpbyIsImlhdCI6MTc4OTk5NTA0NCwiZXhwIjoxNzkwNTk5ODQ0fQ.NTNH89t5D0260NX5kzoYlMtR8JV9g3U4vLO-izDZtSw
 
 ###
 

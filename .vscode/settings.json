@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^git shortlog -sne --all$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
